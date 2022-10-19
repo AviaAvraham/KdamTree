@@ -54,6 +54,8 @@ li {
 ul.tree, ul.tree ul {
   list-style: none;
   padding: 0; 
+  padding-right: 1em;
+  margin-top: 0px;
 } 
 ul.tree ul {
   margin-right: 25px; 

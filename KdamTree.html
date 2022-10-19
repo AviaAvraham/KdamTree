@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Kdam Tree</title>
+    <link rel="stylesheet" href="KdamTree.css"/>
+</head>
+
+<body dir="rtl">
+<div id="showKdamim" style="width: max-content;">
+  <span class="box inputBox">
+    הכנס מספר קורס:
+    <br>
+    <input type="text" id="course">
+    <span id="courseName" style="font-weight:bold;">
+    </span>
+  </span>
+
+  <span class="box nested kdamim" id="kdamim">
+    קדמים:
+    <br>
+    <span id="disp"></span>
+
+  </span>
+</div>
+
+<ul id="kdamTo" class="tree"></ul> 
+
+<script src="courses_202201.min.js"></script>
+<script src="KdamTree.js"></script>
+</body>
+</html>
