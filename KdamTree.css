@@ -1,0 +1,139 @@
+
+ul {
+    list-style-type: none;
+  }
+li {
+    list-style-type: none;
+}
+
+.inputBox {
+  position:relative;
+  right:5px;
+}
+
+.kdamim {
+  margin-right: 20px;
+  user-select:text  !important;
+  text-align: center;
+}
+
+.box {
+  display: inline-block;
+  width: max-content;
+  background: #eee;
+  padding: 1em;
+  border-radius: 0.3em;
+  margin-bottom: 2px;
+}
+
+/* on click styling */
+
+.arrow {
+  cursor: pointer;
+}
+
+.arrow::before { 
+  content: "\25C4";
+  color: black;
+  display: inline-block;
+}
+
+.check-box::before {
+  content: "\25BC"; 
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+/* tree styles */
+ul.tree, ul.tree ul {
+  list-style: none;
+  padding: 0; 
+} 
+ul.tree ul {
+  margin-right: 25px; 
+}
+
+ul.tree li {
+  margin: 0;
+  padding: 0;
+  border-right:2px solid rgb(28, 27, 27);  
+}   
+ul.tree li:last-child {
+  border-right:none;
+}
+ul.tree li:before {
+  position:relative;
+  top:-0.3em;
+  height:1em;
+  width:12px;
+  color:white;
+  border-bottom:2px solid rgb(28, 27, 27);
+  content:"";
+  display:inline-block;
+}
+
+ul.tree li:last-child:before {
+  border-right:2px solid rgb(0, 0, 0);   
+  top: -1em;
+}  
+
+
+/* hover over tooltips */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltiptext 
+{   
+    -webkit-user-select: none; /* Safari 3.1+ */ 
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; 
+}
+
+/* Mobile compatibility */
+@media screen and (max-device-width: 768px) {
+  /* this class is currently unused */
+	.hide-on-mobile {
+		display:none;
+	}
+}
