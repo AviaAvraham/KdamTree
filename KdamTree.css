@@ -133,9 +133,8 @@ ul.tree li:last-child:before {
 }
 
 /* Mobile compatibility */
-@media screen and (max-device-width: 768px) {
-  /* this class is currently unused */
-	.hide-on-mobile {
-		display:none;
+@media screen and (max-device-width: 800) {
+	.kdamim {
+		display:block !important;
 	}
 }
