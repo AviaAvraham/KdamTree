@@ -78,6 +78,8 @@ ul.tree li span {
   margin-top:0.5em;
 }
 
+
+
 ul.tree li:last-child {
   border-right:none;
 }
@@ -94,10 +96,8 @@ ul.tree li:before {
 
 ul.tree li:last-child:before {
   border-right:2px solid rgb(0, 0, 0);   
-  position:relative;
-  height: 3em;
+  height: 2.3em;
 }  
-
 
 /* hover over tooltips */
 
