@@ -11,6 +11,7 @@ li {
   position:relative;
   right:5px;
   margin-bottom: 0px !important;
+  bottom: 0px;
 }
 
 .kdamim {
@@ -94,7 +95,7 @@ ul.tree li:before {
 ul.tree li:last-child:before {
   border-right:2px solid rgb(0, 0, 0);   
   position:relative;
-  height: 2em;
+  height: 3em;
 }  
 
 
@@ -145,8 +146,16 @@ ul.tree li:last-child:before {
 }
 
 /* Mobile compatibility */
-@media screen and (max-width: 480px) {
+@media screen and (max-device-width: 480px) {
 	.kdamim {
-		display:block !important;
-	}
+	    display:inline-block !important;	
+	    max-width: 200px;    
+	    margin: 0px;
+	    margin-right:20px;
+	  }
+  
+	  #showKdamim {
+	    position:relative;
+	    margin-top:20px;
+	  }
 }
