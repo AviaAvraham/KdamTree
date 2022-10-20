@@ -70,15 +70,14 @@ ul.tree li {
   border-right:2px solid rgb(28, 27, 27);  
 }   
 
-ul.tree li:first-child span {
-  margin-top: 1.2em;
+ul.tree > li:first-child span {
+  margin-top: 1em;
 }
 
 ul.tree li span {
-  margin-top:0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0;
 }
-
-
 
 ul.tree li:last-child {
   border-right:none;
