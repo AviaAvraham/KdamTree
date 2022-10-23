@@ -1,147 +1,147 @@
-
-
 ul {
-  list-style-type: none;
-}
+    list-style-type: none;
+  }
 li {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 .inputBox {
-position:relative;
-right:5px;
-margin-bottom: 0px !important;
-bottom: 0px;
+  position:relative;
+  right:5px;
+  margin-bottom: 0px !important;
+  bottom: 0px;
 }
 
 .kdamim {
-margin-right: 20px;
-user-select:text  !important;
-text-align: center;
+  margin-right: 20px;
+  user-select:text  !important;
+  text-align: center;
 }
 
 .box {
-display: inline-block;
-width: max-content;
-background: #eee;
-padding: 1em;
-border-radius: 0.3em;
-margin-bottom: 2px;
+  display: inline-block;
+  width: max-content;
+  background: #eee;
+  padding: 1em;
+  border-radius: 0.3em;
+  margin-bottom: 2px;
 }
 
 /* on click styling */
 
 .arrow {
-cursor: pointer;
+  cursor: pointer;
 }
 
 .arrow::before { 
-content: "\25C4";
-color: black;
-display: inline-block;
+  content: "\25C4";
+  color: black;
+  display: inline-block;
 }
 
 .check-box::before {
-content: "\25BC"; 
+  content: "\25BC"; 
 }
 
 .nested {
-display: none;
+  display: none;
 }
 
 .active {
-display: block;
+  display: block;
 }
 
 /* tree styles */
 ul.tree, ul.tree ul {
-list-style: none;
-padding: 0; 
-padding-right: 1em;
-margin-top: 0px;
+  list-style: none;
+  padding: 0; 
+  padding-right: 1em;
+  margin-top: 0px;
 } 
 ul.tree ul {
-margin-right: 25px; 
+  margin-right: 25px; 
 }
 
 ul.tree li {
-margin: 0;
-padding: 0;
-border-right:2px solid rgb(28, 27, 27);  
+  margin: 0;
+  padding: 0;
+  border-right:2px solid rgb(28, 27, 27);  
 }   
 
-ul.tree > li:first-child span {
-margin-top: 1em;
+ul.tree li span {
+  margin-top: 0.5em;
+  margin-bottom: 0;
 }
 
-ul.tree li span {
-margin-top: 0.5em;
-margin-bottom: 0;
+ul.tree li:last-child span {
+  margin-top: 0em;
 }
 
 ul.tree li:last-child {
-border-right:none;
+  border-right:none;
 }
+
+
 ul.tree li:before {
-position:relative;
-top:-0.3em;
-height:1em;
-width:12px;
-color:white;
-border-bottom:2px solid rgb(28, 27, 27);
-content:"";
-display:inline-block;
+  position:relative;
+  top:-0.3em;
+  height:1em;
+  width:12px;
+  color:white;
+  border-bottom:2px solid rgb(28, 27, 27);
+  content:"";
+  display:inline-block;
 }
 
 ul.tree li:last-child:before {
-border-right:2px solid rgb(0, 0, 0);   
-height: 2.3em;
+  border-right:2px solid rgb(0, 0, 0);   
+  height: 2.3em;
 }  
 
 /* hover over tooltips */
 
 .tooltip {
-position: relative;
-display: inline-block;
-border-bottom: 1px dotted black;
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
 }
 
 .tooltip .tooltiptext {
-visibility: hidden;
-width: 120px;
-background-color: black;
-color: #fff;
-text-align: center;
-border-radius: 6px;
-padding: 5px 0;
-position: absolute;
-z-index: 1;
-bottom: 150%;
-left: 50%;
-margin-left: -60px;
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
 }
 
 .tooltip .tooltiptext::after {
-content: "";
-position: absolute;
-top: 100%;
-left: 50%;
-margin-left: -5px;
-border-width: 5px;
-border-style: solid;
-border-color: black transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
-visibility: visible;
+  visibility: visible;
 }
 
 .tooltiptext 
 {   
-  -webkit-user-select: none; /* Safari 3.1+ */ 
-  -moz-user-select: none; /* Firefox 2+ */
-  -ms-user-select: none; /* IE 10+ */
-  user-select: none; 
+    -webkit-user-select: none; /* Safari 3.1+ */ 
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; 
 }
 
 /* slider */
@@ -207,15 +207,15 @@ input:checked + .slider:before {
 
 /* Mobile compatibility */
 @media screen and (max-device-width: 480px) {
-.kdamim {
-    display:inline-block !important;	
-    max-width: 200px;    
-    margin: 0px;
-    margin-right:20px;
-  }
-
-  #showKdamim {
-    position:relative;
-    margin-top:20px;
-  }
+	.kdamim {
+	    display:inline-block !important;	
+	    max-width: 200px;    
+	    margin: 0px;
+	    margin-right:20px;
+	  }
+  
+	  #showKdamim {
+	    position:relative;
+	    margin-top:20px;
+	  }
 }
