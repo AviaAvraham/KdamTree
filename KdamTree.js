@@ -8,6 +8,14 @@ function updateTree()
     if (course) 
     {
         document.getElementById("courseName").innerHTML = "<br>" + course.general["שם מקצוע"] + "<br>";
+        if (document.querySelector("#treeMode").checked)
+        {
+            //normal mode
+        }
+        else
+        {
+            //kdamim tree mode
+        }
         var kdamNames = processNames(course.general["מקצועות קדם"]);
         if (kdamNames) 
         {
@@ -18,18 +26,52 @@ function updateTree()
             document.getElementById("disp").innerHTML = "לקורס זה אין קדמים!";
         }
 
-        var text = getKdamimOfCourse(courseName);
-        if (text)
+        var nextCourses = getNextCourses(courseName);
+        if (nextCourses)
         {
-            document.getElementById("kdamTo").innerHTML = text;
+            document.getElementById("kdamTo").innerHTML = nextCourses;
         }
         else
         {
             document.getElementById("kdamTo").innerHTML = "קורס זה אינו קדם לאף קורס אחר";
         }
+
+        var avgPlaces = document.getElementsByName("avg");
+        for (elem of avgPlaces)
+        {
+            var courseNum = elem.id; //is a string
+            getAverage("\\course_avg\\" + courseNum + ".txt" ,courseNum);
+        }
         updateBoxesEventListners();
     } 
 }
+
+
+async function getAverage(link,num) {
+    try 
+    {
+        let myObject = await fetch(link);
+        if ((myObject.status === 200))
+        {
+        let myText = await myObject.json();
+        let avg = getAverageFromObject(myText);
+        if (!avg.isNaN)
+            document.getElementById(num).innerHTML = "- ממוצע - " + avg;
+        else    
+            document.getElementById(num).innerHTML = " - אין ממוצע";
+        }
+        
+        else
+        {
+            document.getElementById(num).innerHTML = " - אין ממוצע";
+        }
+    }
+    catch (e)
+    {
+
+    } 
+}
+  
 
 function processNames(str)
 {
@@ -58,14 +100,54 @@ function processNames(str)
     return str;    
 }
 
-function getKdamimOfCourse(courseName)
+function getNextCoursesArr(courseName)
 {
-    var text = "";
+    var arr = [];
     for (var isKdam of courses_from_rishum)
     {
         if (isKdam.general["מקצועות קדם"]!= undefined && isKdam.general["מקצועות קדם"].indexOf(courseName) > -1)
         {
-            var kdamkdam = getKdamimOfCourse(isKdam.general["מספר מקצוע"]);
+            arr.push(isKdam);
+        }
+    }
+    return arr;
+}
+
+function getNextCourses(courseName)
+{
+    var text = "";
+    var nextCOursesArr = getNextCoursesArr(courseName);
+    for (var nextCourse of nextCOursesArr)
+    {
+        var kdamkdam = getNextCourses(nextCourse.general["מספר מקצוע"]);
+        if (kdamkdam == "") 
+        {
+            text += "<li><span class=\"box\">";
+        }
+        else
+        {
+            text += "<li><span class=\"box arrow\">";
+        }
+        text += formatNumberAndName(nextCourse).replace(nextCourse.general["מספר מקצוע"],"<a href='https://students.technion.ac.il/local/technionsearch/course/" +  nextCourse.general["מספר מקצוע"] + "' target='_blank'>" + nextCourse.general["מספר מקצוע"] + "</a>" );
+        text += "<span id='" + nextCourse.general['מספר מקצוע'] + "' name='avg'></span>";
+        text += "</span>";
+        if (kdamkdam != "")
+        {  
+            text += "<ul class='nested' style=\"margin-top:0px\">";
+            text += kdamkdam;
+            text += "</ul>";
+        }
+        text += "</li>";
+    }
+    return text;
+
+
+
+    for (var isKdam of courses_from_rishum)
+    {
+        if (isKdam.general["מקצועות קדם"]!= undefined && isKdam.general["מקצועות קדם"].indexOf(courseName) > -1)
+        {
+            var kdamkdam = getNextCourses(isKdam.general["מספר מקצוע"]);
             if (kdamkdam == "") 
             {
                 text += "<li><span class=\"box\">";
@@ -86,6 +168,29 @@ function getKdamimOfCourse(courseName)
         }
     }
     return text;
+}
+
+function getAverageFromObject(data)
+{
+    //to be automated
+    var count = 0;
+    var gradesSUm = 0, studentsSum = 0;
+    for (var i = 0; i < 7 && count < 3 ; i++)
+    {
+        for (var j = 3; j > 0 && count < 3; j--)
+        {
+            var year = new Date().getFullYear().toString() - i;
+            var semester = year + "0"+ j
+            if (data[semester] == undefined) //not in db
+                continue;
+            //console.log(data[semester]);
+            var students = parseInt(data[semester].Finals.students);
+            studentsSum += students;
+            gradesSUm += students * parseInt(data[semester].Finals.average);
+            count++;
+        }
+    }
+    return gradesSUm/studentsSum;
 }
 
 function updateBoxesEventListners()
@@ -124,6 +229,7 @@ function toggleList()
 // event listeners setup
 
 document.getElementById("course").addEventListener("keyup", updateTree);
+document.getElementById("treeMode").addEventListener("change", updateTree);
 
 updateBoxesEventListners();
 

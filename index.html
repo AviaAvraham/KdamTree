@@ -8,6 +8,7 @@
 </head>
 
 <body dir="rtl">
+  
 <div id="showKdamim" style="width: max-content;">
   <span class="box inputBox">
     הכנס מספר קורס:
@@ -15,6 +16,12 @@
     <input id="course" type="number" style="-webkit-appearance: none;-moz-appearance: textfield;">
     <span id="courseName" style="font-weight:bold;">
     </span>
+    קורסי המשך
+    <label class="switch">
+      <input type="checkbox" id="treeMode" checked>
+      <span class="slider round"></span>
+    </label>
+    קורסי קדם
   </span>
 
   <span class="box nested kdamim" id="kdamim">
@@ -26,6 +33,7 @@
 </div>
 
 <ul id="kdamTo" class="tree"></ul> 
+
 
 <script src="courses_202201.min.js"></script>
 <script src="KdamTree.js"></script>
