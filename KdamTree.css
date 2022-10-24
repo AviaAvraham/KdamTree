@@ -25,6 +25,8 @@ li {
   padding: 1em;
   border-radius: 0.3em;
   margin-bottom: 2px;
+  z-index: 1;
+  position: relative;
 }
 
 /* on click styling */
@@ -74,11 +76,12 @@ ul.tree li span {
 }
 
 ul.tree li:last-child span {
-  margin-top: 0em;
+  /*! margin-top: 0em; */
 }
 
 ul.tree li:last-child {
   border-right:none;
+  marg: ;
 }
 
 
