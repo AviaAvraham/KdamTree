@@ -224,7 +224,7 @@ border-radius: 50%;
 }
 
 
-/* Mobile compatibility */
+/* Mobile compatibility 
 @media screen and (max-device-width: 480px) {
 .kdamim {
     display:inline-block !important;	
@@ -238,3 +238,37 @@ border-radius: 50%;
     margin-top:20px;
   }
 }
+
+/* try this after shabat: */
+
+@media screen and (max-device-width: 480px) {
+  .kdamim {
+      display:inline-block !important;	
+      margin-right:20px;
+    }
+  
+    #showKdamim {
+      position:relative;
+      margin-top:20px;
+    }
+    .inputBox {
+      width:1em;
+      max-width: 240px;
+    }
+    #courseName
+    {
+      display: none;
+    }
+    .box
+    {
+      max-width: 240px;
+    }
+    
+    ul.tree li:last-child::before
+    {
+      height: 3.7em;
+    }
+    body {
+      width:480px;
+    }
+  }
