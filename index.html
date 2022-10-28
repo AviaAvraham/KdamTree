@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <!---meta name="viewport" content="width=device-width, initial-scale=1.0"--->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kdam Tree</title>
     <link rel="stylesheet" href="KdamTree.css"/>
+    <link rel="stylesheet" href="autocomplete.css">
 </head>
 
 <body dir="rtl">
@@ -13,15 +14,25 @@
   <span class="box inputBox">
     הכנס מספר קורס:
     <br>
-    <input id="course" type="number" style="-webkit-appearance: none;-moz-appearance: textfield;">
-    <span id="courseName" style="font-weight:bold;">
-    </span>
+    <input id="course" type="text">
+    <span id="courseName" style="font-weight:bold;"></span>
     קורסי המשך
     <label class="switch">
       <input type="checkbox" id="treeMode" checked>
       <span class="slider round"></span>
     </label>
     קורסי קדם
+    <br>
+    <input id="malagim" type="checkbox" style="float: right; margin-top: 5px;">
+<div style="margin-right: 25px; margin-bottom:5px;">
+     הצג מל"גים בלבד
+</div>
+
+<input id="english" type="checkbox" style="float: right; margin-top: 5px;">
+<div style="margin-right: 25px;">
+     הצג קורסי אנגלית בלבד
+</div>
+
   </span>
 
   <span class="box nested kdamim" id="kdamim">
@@ -37,5 +48,6 @@
 
 <script src="courses_202201.min.js"></script>
 <script src="KdamTree.js"></script>
+<script src="autocomplete.js"></script>
 </body>
 </html>

@@ -1,3 +1,14 @@
+@import url(http://fonts.googleapis.com/earlyaccess/alefhebrew.css);
+body{
+  font-family: "Alef Hebrew",
+               “Helvetica Neue”,
+               Helvetica,
+               Arial,
+               sans-serif;
+  background: rgb(235, 229, 229);
+  max-width: max-content;
+}
+
 ul {
   list-style-type: none;
 }
@@ -10,23 +21,37 @@ position:relative;
 right:5px;
 margin-bottom: 0px !important;
 bottom: 0px;
+z-index: 10 !important;
+width: 20em !important;
+}
+
+#course{
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 8px;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  width: 95%;
 }
 
 .kdamim {
 margin-right: 20px;
 user-select:text  !important;
 text-align: center;
+position: absolute !important;
+top:inherit;
 }
 
 .box {
 display: inline-block;
 width: max-content;
-background: #eee;
+background: rgb(192, 190, 190);
 padding: 1em;
 border-radius: 0.3em;
 margin-bottom: 2px;
 z-index: 1;
 position: relative;
+box-shadow: 0 2px 4px 2px rgba(80, 79, 79, 0.5);
 }
 
 /* on click styling */
@@ -71,7 +96,7 @@ border-right:2px solid rgb(28, 27, 27);
 }   
 
 ul.tree li span {
-margin-top: 0.5em;
+margin-top: 0.7em;
 margin-bottom: 0;
 }
 
@@ -178,9 +203,6 @@ bottom: 2px;
 background-color: white;
 -webkit-transition: .4s;
 transition: .4s;
-}
-
-input:checked + .slider {
 }
 
 input:focus + .slider {
