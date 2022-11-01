@@ -347,9 +347,7 @@ async function showMalagimAndEnglish(e)
         updateBoxesEventListners();
 
         let avgPlaces = Array.from(document.getElementsByName("avg"));
-        avgPlaces = avgPlaces.filter(i => isVisible(i))
-        console.log(avgPlaces)
-        console.log(avgPlaces.length)
+        avgPlaces = avgPlaces.filter(i => isVisible(i));
         
         putColorByValue(avgPlaces).then( function() {   
             
@@ -364,7 +362,6 @@ async function showMalagimAndEnglish(e)
                         grades.push(0);
                 }
                 grades.sort((a,b)=>b-a);
-                console.log(grades);
                 var index = 0;
                 var sortedElems = [];
                 while ( 0 != avgPlaces.length)
@@ -381,7 +378,6 @@ async function showMalagimAndEnglish(e)
                         {
                             if (parseFloat(avgPlaces[i].innerHTML.replace("- ממוצע - ","")) == max)
                             {
-
                                 sortedElems.push(avgPlaces[i].parentElement.parentElement);
                                 //document.getElementById("kdamTo").appendChild(avgPlaces[i].parentElement.parentElement);
                                 avgPlaces.splice(i,1);
@@ -393,7 +389,7 @@ async function showMalagimAndEnglish(e)
                 }
                 for (var elem of sortedElems)
                     document.getElementById("kdamTo").appendChild(elem);
-            })//.catch(console.log("???"));
+            })//.catch(console.log("error"));
     }
     else
     {
@@ -406,7 +402,6 @@ async function showMalagimAndEnglish(e)
             updateTree();
             document.getElementById("course").disabled = false;
         }
-
     }
 }
 
