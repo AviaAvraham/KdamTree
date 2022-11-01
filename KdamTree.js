@@ -433,5 +433,5 @@ document.getElementById("malagim").addEventListener("change", showMalagimAndEngl
 document.getElementById("english").addEventListener("change", showMalagimAndEnglish);
 
 //load defaults
-document.getElementById("course").value = 234114;
+document.getElementById("course").value = "234114 - מבוא למדעי המחשב מ'";
 updateTree();

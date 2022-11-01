@@ -224,23 +224,7 @@ border-radius: 50%;
 }
 
 
-/* Mobile compatibility 
-@media screen and (max-device-width: 480px) {
-.kdamim {
-    display:inline-block !important;	
-    max-width: 200px;    
-    margin: 0px;
-    margin-right:20px;
-  }
-
-  #showKdamim {
-    position:relative;
-    margin-top:20px;
-  }
-}
-
-/* try this after shabat: */
-
+/* Mobile compatibility */
 @media screen and (max-device-width: 480px) {
   .kdamim {
       display:inline-block !important;	
