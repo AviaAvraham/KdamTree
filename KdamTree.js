@@ -119,7 +119,8 @@ async function putColorByValue(elems)
     {
         var courseNum = elem.getAttribute("value"); //is a string
         if (isVisible(elem))
-            promises.push(getAverage("https://aviaavraham.github.io/KdamTree/course_avg/"+courseNum + ".txt",elem));
+            promises.push(getAverage("https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json",elem));
+            //promises.push(getAverage("https://aviaavraham.github.io/KdamTree/course_avg/"+courseNum + ".txt",elem));
     }
     return Promise.all(promises);
 }
@@ -234,7 +235,7 @@ function getNextCourses(courseName)
 function getAverageFromObject(data)
 {
     var count = 0;
-    var gradesSUm = 0, studentsSum = 0;
+    var gradesSum = 0, studentsSum = 0;
     for (var i = 0; i < 7 && count < 3 ; i++)
     {
         for (var j = 3; j > 0 && count < 3; j--)
@@ -245,11 +246,11 @@ function getAverageFromObject(data)
                 continue;
             var students = parseInt(data[semester].Finals.students);
             studentsSum += students;
-            gradesSUm += students * parseInt(data[semester].Finals.average);
+            gradesSum += students * parseInt(data[semester].Finals.average);
             count++;
         }
     }
-    return gradesSUm/studentsSum;
+    return gradesSum/studentsSum;
 }
 
 function updateBoxesEventListners()
