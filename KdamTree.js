@@ -1,3 +1,25 @@
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 function updateTree() 
 {
     var textbox = document.getElementById("course");
@@ -124,7 +146,7 @@ async function getAverage(link,element) {
             let avg = getAverageFromObject(myText);
             if (!isNaN(avg))
                 {
-                    element.innerHTML = "- ממוצע - " + avg.toFixed(2);
+                    element.innerHTML = " - ממוצע - " + avg.toFixed(2);
                     element.parentElement.style.background = getColor(avg);
                 }
             else    
@@ -269,7 +291,6 @@ async function showMalagimAndEnglish(e)
 {
     var mode = e.srcElement.id
     var otherOption = mode == "malagim" ? "english" : "malagim";
-    var elems = [];
     var text = "";
     if (e.srcElement.checked)
     {
@@ -293,6 +314,10 @@ async function showMalagimAndEnglish(e)
                     temp += englishCourse + " "
             courseNums = temp.trimEnd();
         }
+
+        addCustom(courseNums);
+        return;
+
         var courseNumsArr = courseNums.split(" ");
         document.getElementById("kdamTo").innerHTML = "";
 
@@ -405,6 +430,180 @@ async function showMalagimAndEnglish(e)
     }
 }
 
+async function addCustom(courseNums)
+{
+    var elems = [];
+    var courseNumsArr = courseNums.split(" ");
+    document.getElementById("kdamTo").innerHTML = "";
+
+    for (var courseNum of courseNumsArr)
+    {
+        var course = getCourse(courseNum);
+        if (course)
+        {
+            var elem = document.createElement("li");
+            var span = document.createElement("span");
+            span.classList.add("box");
+            elem.appendChild(span);
+
+            var link = document.createElement("a");
+            link.target = "_blank"
+            link.href =  "https://students.technion.ac.il/local/technionsearch/course/" +  course.general["מספר מקצוע"];
+            link.innerText = course.general["מספר מקצוע"];
+            span.appendChild(link);
+            span.innerHTML += " - ";
+            span.innerHTML += course.general["שם מקצוע"];
+
+            var avgPlaceHolder = document.createElement("span");
+            avgPlaceHolder.setAttribute("value",courseNum);
+            avgPlaceHolder.setAttribute("Name", "avg");
+            span.appendChild(avgPlaceHolder);
+            elems.push(elem);
+            document.getElementById("kdamTo").appendChild(elem);
+
+            var ul = document.createElement("ul")
+            ul.classList.add("nested");
+            ul.style = "margin-top:0px;";
+            var req = getPreCourses(getCourse(courseNum));
+            if (req)
+                span.classList.add("arrow")
+            ul.innerHTML = req;
+
+            elem.appendChild(ul);
+        }
+    }
+
+    updateBoxesEventListners();
+
+    let avgPlaces = Array.from(document.getElementsByName("avg"));
+    avgPlaces = avgPlaces.filter(i => isVisible(i));
+    
+    putColorByValue(avgPlaces).then( function() {   
+        var grades = [];
+        for (var i = 0 ; i < avgPlaces.length; i++)
+        {
+            if (avgPlaces[i].innerHTML.indexOf("אין ממוצע") < 0)
+            {
+                grades.push(parseFloat(avgPlaces[i].innerHTML.replace("- ממוצע - ","")))
+            }
+            else
+                grades.push(0);
+        }
+        grades.sort((a,b)=>b-a);
+        var index = 0;
+        var sortedElems = [];
+        while ( 0 != avgPlaces.length)
+        {
+            var max = grades[index];
+            if (max == 0)
+            {
+                sortedElems.push(avgPlaces.pop().parentElement.parentElement)
+                index++;
+            }
+            else 
+            {
+                for (var i = 0 ; i < avgPlaces.length; i++)
+                {
+                    if (parseFloat(avgPlaces[i].innerHTML.replace("- ממוצע - ","")) == max)
+                    {
+                        sortedElems.push(avgPlaces[i].parentElement.parentElement);
+                        //document.getElementById("kdamTo").appendChild(avgPlaces[i].parentElement.parentElement);
+                        avgPlaces.splice(i,1);
+                        index++;
+                        break;
+                    }
+                }
+            }
+        }
+        for (var elem of sortedElems)
+            document.getElementById("kdamTo").appendChild(elem);
+    })//.catch(console.log("error"));
+}
+
+function getMutual(arr1, arr2)
+{
+    return arr1.filter(function(n) {
+        return arr2.indexOf(n) !== -1;
+    });
+}
+
+function showAllSelected()
+{
+    var count = document.querySelector("#malagim").checked + document.querySelector("#english").checked;
+    var names = getCookie("names").split(",");
+    var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004";
+    var malagim = "214120 324262 324266 324267 324269 324273 324274 324279 324282 324283 324284 324292 324293 324295 324297 324305 324306 324307 324310 324430 324432 324442 324444 324445 324453 324456 324457 324462 324520 324521 324527 324528 324539 324540 324946 324962 324992 325001 326004";
+    var arr = [];
+    if (document.querySelector("#malagim").checked && document.querySelector("#english").checked)
+        arr = getMutual(englishCourses.split(" "),malagim.split(" "))
+    else if (document.querySelector("#malagim").checked)
+        arr = arr.concat(malagim.split(" "));
+    else if (document.querySelector("#english").checked)
+        arr = arr.concat(englishCourses.split(" "));
+    
+    var list = document.getElementsByName("customListCheckbox");
+    for (var checkbox of list)
+    {
+        if (checkbox.checked)
+        {
+            var courseList = getCookie(checkbox.nextSibling.innerText);
+            if (arr.length)
+            {
+                arr = getMutual(arr,courseList.split(" "));
+            }
+            else if (!count)
+            {
+                arr = courseList.split(" ");
+            }
+            count++;
+        }
+    }
+    arr = [...new Set(arr)];
+    console.log(arr);
+    if (count)
+    {
+        document.querySelector("#course").disabled = true;
+        addCustom(arr.toString().replaceAll(","," "));
+
+    }
+    else
+    {
+        document.querySelector("#course").disabled = false;
+        updateTree();
+    }
+}
+
+function addCheckBox(listName,courseNums)
+{
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.style = "float: right; margin-top: 5px;";
+    input.setAttribute("name","customListCheckbox");
+    //document.querySelector("#mainWindow").insertBefore(input,document.querySelector("#addList"));
+
+    input.addEventListener("change",showAllSelected); // <================
+    var div = document.createElement("div");
+    div.style = "margin-right: 25px;";
+    div.innerHTML = listName;
+    
+
+    var removeButton = document.createElement("input");
+    removeButton.type = "button";
+    removeButton.style = "background:none; border:none;cursor:pointer;left:60px;position: absolute;"
+    removeButton.onclick = function () 
+    { this.parentElement.previousSibling.remove();
+        this.parentElement.remove();
+        var cookieName = this.parentElement.innerText;
+        setCookie(cookieName,courseNums,-1);
+        var cookiesAsArr = getCookie("names").split(",");
+        cookiesAsArr.splice(cookiesAsArr.indexOf(cookieName),1);
+        setCookie("names",cookiesAsArr.toString() ,-1);
+        /* delete cookies */};
+    removeButton.value = "X";
+    div.appendChild(removeButton);
+    document.querySelector("#mainWindow").insertBefore(div,document.querySelector("#addList"));
+}
+
 // event listeners setup
 
 document.getElementById("course").addEventListener("keyup", updateTree);
@@ -417,16 +616,78 @@ function()
 {
     document.querySelector("#kdamim").classList.remove("nested");
 });
+/*
+document.querySelector("#listName").addEventListener("keyup",function(){
+    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == "" || document.querySelector("#coursesToAdd").value == "";
+});
+
+document.querySelector("#coursesToAdd").addEventListener("keyup",function(){
+    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == "" || document.querySelector("#coursesToAdd").value == "";
+}); */
 
 document.getElementById("showKdamim").addEventListener("mouseout",
 function() 
 {
     document.querySelector("#kdamim").classList.add("nested");
 });
+/*
+document.getElementById("addList").addEventListener("click",
+function()
+{
+    document.querySelector("#addListWindow").classList.toggle("nested");
+    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == ""; 
+});
+document.getElementById("saveList").addEventListener("click",
+function()
+{
+    var arr = document.querySelector("#coursesToAdd").value.split(/\n| |-/);
+    var courseNums = "";
+    for (var t of arr)
+    {
+        var val = parseInt(t).toString();
+        if (val.length == 5)
+        {
+            val = "0" + val;
+        }
+        if (val && val != "NaN")
+        {
+            //console.log(val)
+            var course = getCourse(val);
+            if (course)
+            {
+                if (courseNums.indexOf(val) == -1)
+                    courseNums += val + " ";
+                console.log(formatNumberAndName(course));
+            }
+        }
+    }
+    var namesList = getCookie("names");
+    var newListName = document.querySelector("#listName").value.replaceAll(",","");
+    var cookieVal = namesList ? namesList + ","  + newListName : newListName;
+    if (namesList.split(",").indexOf(newListName) > -1)
+    {
+        if(!confirm("קיימת כבר רשימה בשם זה, האם ברצונך לעדכן אותה?"))
+            return;
+        cookieVal = namesList; //not empty and in there, so don't change
+    }
+    else 
+        addCheckBox(newListName,courseNums);
+    
+    document.querySelector("#addListWindow").classList.toggle("nested");
+    setCookie("names",cookieVal ,365*5);
+    setCookie(newListName,courseNums,365*5);
+});
+*/
 
-document.getElementById("malagim").addEventListener("change", showMalagimAndEnglish);
-document.getElementById("english").addEventListener("change", showMalagimAndEnglish);
+document.getElementById("malagim").addEventListener("change", showAllSelected);
+document.getElementById("english").addEventListener("change", showAllSelected);
 
 //load defaults
 document.getElementById("course").value = "234114 - מבוא למדעי המחשב מ'";
 updateTree();
+
+var cookiesNames = getCookie("names").split(",");
+for (var cookie of cookiesNames){
+    if (cookie)
+        addCheckBox(cookie,getCookie(cookie));
+}
