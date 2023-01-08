@@ -319,6 +319,6 @@ border-radius: 50%;
       height: 3.7em;
     }
     body {
-      width:480px;
+      max-width:480px;
     }
   }
