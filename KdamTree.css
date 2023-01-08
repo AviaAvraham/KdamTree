@@ -247,8 +247,8 @@ border-radius: 50%;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
-  right: 0;
   left: 0;
+  right: 0;
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
@@ -289,7 +289,7 @@ border-radius: 50%;
 @media screen and (max-device-width: 480px) {
 
   .modal-content {
-    width: 70%;
+    /*width: 70%;*/
   }
 
   .kdamim {
