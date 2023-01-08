@@ -23,6 +23,7 @@ function getCookie(cname) {
 function updateTree() 
 {
     var textbox = document.getElementById("course");
+    //console.log(textbox.value);
     //textbox.value = textbox.value.replaceAll(" ","");
     var courseName = document.getElementById("course").value.split(" ")[0];
     
@@ -57,8 +58,63 @@ function updateTree()
         var avgPlaces = document.getElementsByName("avg");
         putColorByValue(avgPlaces);
         updateBoxesEventListners();
+
+        getSummerData(courseName);
     } 
 }
+
+
+async function getSummerData(courseNum)
+{
+    var sum = 0, count = 0;
+    var years = "";
+    for (var i = new Date().getFullYear(); i >= 2017 ; i--)
+    {
+        var a = await fetch("https://cheesefork.cf/courses/courses_"+i+"03.min.js");
+        var b = await a.text();
+        var text = 'מספר מקצוע":"' + courseNum;
+        if (b.indexOf(text) > -1)
+        {
+            years += i.toString() + " ";
+            count++;
+            //document.getElementById("summerStatistics").innerText = true;
+        }
+        else
+        {
+            //document.getElementById("summerStatistics").innerText = false;
+        }
+    }
+    var currYear = (new Date().getFullYear()) - 2017 + -1 + (new Date().getMonth() > 7);
+    var text;
+    if (years != "")
+        text = "ב-" + currYear + " השנים האחרונות, הקורס הועבר בקיץ " + count + " פעמים (" + years.trim().replaceAll(" "," ,") + ")";
+    else
+        text = "הקורס לא הועבר בקיץ ב-" + currYear + " השנים האחרונות";
+    document.getElementById("summerStatistics").innerText = text;
+    text = "<br>";
+    var link = "https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json";
+    let myObject = await fetch(link);
+    if ((myObject.status === 200))
+    {
+        let myText = await myObject.json();
+        let avg = getAverageFromObject(myText);
+        if (!isNaN(avg))
+        {
+            text += "<b>"
+            text += "ממוצע - " + avg.toFixed(2);
+            text += "</b>"
+        }
+        else    
+            text += "אין ממוצע זמין עבור קורס זה";
+    }
+    else
+    {
+        text += "אין ממוצע זמין עבור קורס זה";
+    }
+    document.getElementById("summerStatistics").innerHTML += text;
+    //document.getElementById("summerStatistics").innerText = text;
+}
+
 
 function getPreCourses(course)
 {
@@ -193,7 +249,7 @@ function processNames(str)
 function getNextCoursesArr(courseName)
 {
     var arr = [];
-    for (var isKdam of courses_from_rishum)
+    for (var isKdam of coursesFromRishumLatest)
     {
         if (isKdam.general["מקצועות קדם"]!= undefined && isKdam.general["מקצועות קדם"].indexOf(courseName) > -1)
         {
@@ -273,7 +329,7 @@ function formatNumberAndName(course)
 
 function getCourse(number) 
 {
-    for (var course of courses_from_rishum) 
+    for (var course of coursesFromRishumLatest) 
         if (course.general["מספר מקצוע"] == number) 
             return course;
 
@@ -562,7 +618,7 @@ function showAllSelected()
         }
     }
     arr = [...new Set(arr)];
-    console.log(arr);
+    //console.log(arr);
     if (count)
     {
         document.querySelector("#course").disabled = true;
@@ -607,6 +663,8 @@ function addCheckBox(listName,courseNums)
     document.querySelector("#mainWindow").insertBefore(div,document.querySelector("#addList"));
 }
 
+
+const coursesFromRishumLatest = courses_from_rishum;
 // event listeners setup
 
 document.getElementById("course").addEventListener("keyup", updateTree);
@@ -681,7 +739,19 @@ function()
     setCookie(newListName,courseNums,365*5);
 });
 */
-
+/*
+document.getElementById("beta").addEventListener("change", 
+function()
+{
+    var modeOn = this.checked;
+    //update cookies and read them onload
+    var elems = document.getElementsByClassName("betaFeature");
+    for (var elem of elems)
+    {
+        elem.classList.toggle("nested");
+    }
+});
+*/
 
 var englishCourses = "014603 046200 036013 038746 036026 036073 036004 056391 056403 056149 066614 084515 085407 085915 085802 085805 086484 086762 86802 088792 094195 094396 096617 104182 104122 106433 106723 196014 197010 114229 114252 114250 114251 136022 136014 136037 205028 236716 236299 236330 236509 236781 236025 236606 336016 324282 326000 326002 326005 326006"; //spring 2022
 //var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004"; //winter 2022
@@ -695,6 +765,7 @@ document.getElementById("english").addEventListener("change", showAllSelected);
 //load defaults
 document.getElementById("course").value = "234114 - מבוא למדעי המחשב מ'";
 updateTree();
+
 
 var cookiesNames = getCookie("names").split(",");
 for (var cookie of cookiesNames){

@@ -21,20 +21,62 @@
 </head>
 
 <body dir="rtl">
-  
+ 
 <div id="showKdamim">
-  <span id="mainWindow" class="box inputBox">
+  <span id="mainWindow" class="box inputBox" style="position: relative;">
+    
+    <!--div class="circle" id="showInfo">i</div>
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>האתר פותח על ידי אביה אברהם</p>
+      <div>
+      <input type="checkbox" id="beta" style="margin-top: 8px;">הצג גרסת בטא
+      </div>
+    </div>
+  </div>
+    <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+      
+      // Get the button that opens the modal
+      var btn = document.getElementById("showInfo");
+      
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      
+      // When the user clicks the button, open the modal 
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      </script-->
+
     הכנס מספר קורס:
     <br>
+    
     <input id="course" type="text">
     <span id="courseName" style="font-weight:bold;"></span>
-    קורסי המשך
-    <label class="switch">
+    <div>
+    <label>קורסי המשך</label>
+    <label class="switch" >
       <input type="checkbox" id="treeMode" checked>
       <span class="slider round"></span>
     </label>
-    קורסי קדם
+    <label>קורסי קדם</label>
     <br>
+    </div>
     <div style="margin-right: 0px; margin-top: 3px;">
       <input id="malagim" type="checkbox" style="float: right; margin-top: 5px;">
        הצג מל"גים בלבד
@@ -45,6 +87,7 @@
        הצג קורסי אנגלית בלבד
     </div>
 
+    <label id="summerStatistics" class="betaFeature"></label>
     <!--input id="addList" type="button" style="float: right; margin-top: 5px;" value="הוסף רשימה"-->
     
   </span>
