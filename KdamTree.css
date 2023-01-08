@@ -289,7 +289,7 @@ border-radius: 50%;
 @media screen and (max-device-width: 480px) {
 
   .modal-content {
-    /*width: 70%;*/
+    width: 70%;
   }
 
   .kdamim {
@@ -319,6 +319,6 @@ border-radius: 50%;
       height: 3.7em;
     }
     body {
-      max-width:480px;
+      width:480px;
     }
   }
