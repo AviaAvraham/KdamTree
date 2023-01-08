@@ -666,7 +666,46 @@ function addCheckBox(listName,courseNums)
 }
 
 
-const coursesFromRishumLatest = courses_from_rishum;
+var coursesFromRishumLatest = courses_from_rishum;
+var currentSemester;
+var winterAndSpring;
+async function setupData()
+{
+    //this needs to be automated
+    var a = await fetch("https://cheesefork.cf/courses/courses_202201.min.js");
+    var b = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
+    
+    var firstRadio = document.querySelector("#showSemester");
+    var secondRadio = document.querySelector("#showAllYear");
+    if (a.status === 200 && b.status === 200)
+    {
+        let firstRishum = await a.text();
+        firstRishum = firstRishum.replace("courses_from_rishum","list2");
+        eval(firstRishum);
+        let secondRishum = await b.text();
+        secondRishum = secondRishum.replace("courses_from_rishum","currentSemester");
+        eval(secondRishum);
+        winterAndSpring = [...new Set([...currentSemester ,...list2])];
+
+        if (firstRadio.checked)
+        {
+            coursesFromRishumLatest = currentSemester; 
+            //setCookie("pref","current",365*5);
+            //need to check what's current semester when automating
+        }
+        else 
+        {
+            //setCookie("pref","allYear",365*5);
+            coursesFromRishumLatest = winterAndSpring;
+        }
+        //document.getElementById("kdamTo").innerHTML = "";
+        //document.getElementById("summerStatistics").innerHTML = "";
+    }
+    
+    updateAutoComplete();
+    updateTree();
+}
+setupData();
 // event listeners setup
 
 document.getElementById("course").addEventListener("keyup", updateTree);
@@ -754,6 +793,11 @@ function()
     }
 });
 */
+
+document.getElementById("showAllYear").addEventListener("change", setupData);
+document.getElementById("showSemester").addEventListener("change", setupData);
+
+
 
 var englishCourses = "014603 046200 036013 038746 036026 036073 036004 056391 056403 056149 066614 084515 085407 085915 085802 085805 086484 086762 86802 088792 094195 094396 096617 104182 104122 106433 106723 196014 197010 114229 114252 114250 114251 136022 136014 136037 205028 236716 236299 236330 236509 236781 236025 236606 336016 324282 326000 326002 326005 326006"; //spring 2022
 //var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004"; //winter 2022

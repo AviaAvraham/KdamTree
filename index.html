@@ -25,13 +25,18 @@
 <div id="showKdamim">
   <span id="mainWindow" class="box inputBox" style="position: relative;">
     
-    <!--div class="circle" id="showInfo">i</div>
+    <div class="circle" id="showInfo">i</div>
     <div id="myModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <p>האתר פותח על ידי אביה אברהם</p>
+      <p>העדפות</p>
       <div>
-      <input type="checkbox" id="beta" style="margin-top: 8px;">הצג גרסת בטא
+      <input type="radio" id="showSemester" style="margin-top: 8px;" name="summerPref" checked>
+      <label for="showAllYear">
+      הצג עבור הסמסטר הנוכחי בלבד
+    </label>
+      <br>
+      <input type="radio" id="showAllYear" style="margin-top: 8px;" name="summerPref">הצג עבור כל השנה (אביב וחורף)
       </div>
     </div>
   </div>
@@ -61,7 +66,7 @@
           modal.style.display = "none";
         }
       }
-      </script-->
+      </script>
 
     הכנס מספר קורס:
     <br>

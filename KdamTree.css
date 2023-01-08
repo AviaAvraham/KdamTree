@@ -263,8 +263,9 @@ border-radius: 50%;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 20%; /* override these in mobile */
-  height: 20%;
+  width: 20%; /* override in mobile */
+  /*height: 20%;*/
+  max-height: fit-content;
 }
 
 /* The Close Button */
@@ -285,6 +286,11 @@ border-radius: 50%;
 
 /* Mobile compatibility */
 @media screen and (max-device-width: 480px) {
+
+  .modal-content {
+    width: 70%;
+  }
+
   .kdamim {
       display:inline-block !important;	
       margin-right:20px;

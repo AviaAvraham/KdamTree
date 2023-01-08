@@ -99,11 +99,21 @@ function autocomplete(inp, arr) {
     });
   }
 
-var formattedCourses = [];
-for (var course of courses_from_rishum)
+
+function updateAutoComplete()
 {
-    formattedCourses.push(formatNumberAndName(course));
+  formattedCourses = [];
+  //console.log(coursesFromRishumLatest.length)
+  var i = 0;
+  for (var course of coursesFromRishumLatest)
+  {
+      formattedCourses.push(formatNumberAndName(course));
+  }
+  console.log(formattedCourses.length)
+  autocomplete(document.getElementById("course"), formattedCourses);
 }
+var formattedCourses = [];
+//updateAutoComplete(); //called from setupData in main file
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("course"), formattedCourses);
