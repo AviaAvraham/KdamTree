@@ -344,7 +344,7 @@ function toggleList()
     var newElems = this.parentElement.querySelectorAll('[name="avg"]') ; //with parent
     putColorByValue(newElems);
 }
-
+/*
 async function showMalagimAndEnglish(e)
 {
     var mode = e.srcElement.id
@@ -489,7 +489,7 @@ async function showMalagimAndEnglish(e)
         }
     }
 }
-
+*/
 async function addCustom(courseNums)
 {
     var elems = [];
@@ -624,12 +624,13 @@ function showAllSelected()
     {
         document.querySelector("#course").disabled = true;
         addCustom(arr.toString().replaceAll(","," "));
-
+        document.getElementById("summerStatistics").classList.add("nested");
     }
     else
     {
         document.querySelector("#course").disabled = false;
         updateTree();
+        document.getElementById("summerStatistics").classList.remove("nested");
     }
 }
 
