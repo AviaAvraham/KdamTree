@@ -66,6 +66,7 @@ function updateTree()
 
 async function getSummerData(courseNum)
 {
+    //document.getElementById("summerStatistics").innerText = "";
     var sum = 0, count = 0;
     var years = "";
     for (var i = new Date().getFullYear(); i >= 2017 ; i--)
@@ -90,8 +91,8 @@ async function getSummerData(courseNum)
         text = "ב-" + currYear + " השנים האחרונות, הקורס הועבר בקיץ " + count + " פעמים (" + years.trim().replaceAll(" "," ,") + ")";
     else
         text = "הקורס לא הועבר בקיץ ב-" + currYear + " השנים האחרונות";
-    document.getElementById("summerStatistics").innerText = text;
-    text = "<br>";
+    //document.getElementById("summerStatistics").innerText = text;
+    text += "<br>";
     var link = "https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json";
     let myObject = await fetch(link);
     if ((myObject.status === 200))
@@ -111,7 +112,7 @@ async function getSummerData(courseNum)
     {
         text += "אין ממוצע זמין עבור קורס זה";
     }
-    document.getElementById("summerStatistics").innerHTML += text;
+    document.getElementById("summerStatistics").innerHTML = text;
     //document.getElementById("summerStatistics").innerText = text;
 }
 
