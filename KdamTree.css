@@ -288,6 +288,11 @@ border-radius: 50%;
 /* Mobile compatibility */
 @media screen and (max-device-width: 480px) {
 
+  .modal
+  {
+    width: 100%;
+  }
+
   .modal-content {
     width: 70%;
   }
