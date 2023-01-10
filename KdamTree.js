@@ -668,40 +668,66 @@ function addCheckBox(listName,courseNums)
 
 var coursesFromRishumLatest = courses_from_rishum;
 var currentSemester;
+var previousSemester;
 var winterAndSpring;
 async function setupData()
 {
-    //this needs to be automated
-    var a = await fetch("https://cheesefork.cf/courses/courses_202201.min.js");
-    var b = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
+    if (currentSemester == undefined || previousSemester == undefined || winterAndSpring == undefined)
+    {
+        //this needs to be automated
+        var a = await fetch("https://cheesefork.cf/courses/courses_202201.min.js");
+        var b = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
+        
+        if (a.status === 200 && b.status === 200)
+        {
+            let firstRishum = await a.text();
+            firstRishum = firstRishum.replace("courses_from_rishum","list1");
+            eval(firstRishum);
+            previousSemester = list1;
+            console.log(previousSemester.length)
+            let secondRishum = await b.text();
+            secondRishum = secondRishum.replace("courses_from_rishum","list2");
+            eval(secondRishum);
+            currentSemester = list2;
+            console.log(currentSemester.length);
+            
+            winterAndSpring = [];
+            Object.assign(winterAndSpring,currentSemester); //to avoid modifying currentSemester
+            for (course of previousSemester)
+            {
+                var add = true;
+                for (courseNow of currentSemester)
+                { 
+                    if (course.general["מספר מקצוע"] == courseNow.general["מספר מקצוע"])
+                        add = false;
+                    
+                }
+
+                if (add)
+                {
+                    winterAndSpring.push(course);
+                    console.log(course.general["מספר מקצוע"]);
+                }
+            } 
+        }
+    }
     
     var firstRadio = document.querySelector("#showSemester");
     var secondRadio = document.querySelector("#showAllYear");
-    if (a.status === 200 && b.status === 200)
-    {
-        let firstRishum = await a.text();
-        firstRishum = firstRishum.replace("courses_from_rishum","list2");
-        eval(firstRishum);
-        let secondRishum = await b.text();
-        secondRishum = secondRishum.replace("courses_from_rishum","currentSemester");
-        eval(secondRishum);
-        winterAndSpring = [...new Set([...currentSemester ,...list2])];
 
-        if (firstRadio.checked)
-        {
-            coursesFromRishumLatest = currentSemester; 
-            //setCookie("pref","current",365*5);
-            //need to check what's current semester when automating
-        }
-        else 
-        {
-            //setCookie("pref","allYear",365*5);
-            coursesFromRishumLatest = winterAndSpring;
-        }
-        //document.getElementById("kdamTo").innerHTML = "";
-        //document.getElementById("summerStatistics").innerHTML = "";
+    if (firstRadio.checked)
+    {
+        console.log("here!")
+        coursesFromRishumLatest = currentSemester; 
+        //setCookie("pref","current",365*5);
+        //need to check what's current semester when automating
     }
-    
+    else 
+    {
+        //setCookie("pref","allYear",365*5);
+        coursesFromRishumLatest = winterAndSpring;
+    }
+
     updateAutoComplete();
     updateTree();
 }
