@@ -244,10 +244,10 @@ border-radius: 50%;
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
+  position: absolute; /* Stay in place */
   z-index: 100; /* Sit on top */
   padding-top: 100px; /* Location of the box */
-  left: 0;
+  left: 0; 
   right: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -270,15 +270,15 @@ border-radius: 50%;
 }
 
 /* The Close Button */
-.close {
+.closeModal {
   color: black;
   float: left;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.closeModal:hover,
+.closeModal:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -288,16 +288,8 @@ border-radius: 50%;
 /* Mobile compatibility */
 @media screen and (max-device-width: 480px) {
 
-  .modal {
-    position: absolute; /* Stay in place */
-    padding-top: 0px;
-  }
-
   .modal-content {
-    width: 60%;
-    position: fixed;
-    top: 20%;
-    left: 50%;
+    width: 70%;
   }
 
   .kdamim {
