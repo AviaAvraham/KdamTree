@@ -293,8 +293,9 @@ border-radius: 50%;
   }
 
   .kdamim {
-      display:inline-block !important;	
+      display:inline-block !important;
       margin-right:20px;
+      max-width: 140px !important;
     }
   
     #showKdamim {
