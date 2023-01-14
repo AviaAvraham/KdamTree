@@ -109,7 +109,7 @@ function updateAutoComplete()
   {
       formattedCourses.push(formatNumberAndName(course));
   }
-  console.log(formattedCourses.length)
+  //console.log(formattedCourses.length)
   autocomplete(document.getElementById("course"), formattedCourses);
 }
 var formattedCourses = [];

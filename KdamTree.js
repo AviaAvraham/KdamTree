@@ -684,12 +684,12 @@ async function setupData()
             firstRishum = firstRishum.replace("courses_from_rishum","list1");
             eval(firstRishum);
             previousSemester = list1;
-            console.log(previousSemester.length)
+            //console.log(previousSemester.length)
             let secondRishum = await b.text();
             secondRishum = secondRishum.replace("courses_from_rishum","list2");
             eval(secondRishum);
             currentSemester = list2;
-            console.log(currentSemester.length);
+            //console.log(currentSemester.length);
             
             winterAndSpring = [];
             Object.assign(winterAndSpring,currentSemester); //to avoid modifying currentSemester
@@ -706,7 +706,7 @@ async function setupData()
                 if (add)
                 {
                     winterAndSpring.push(course);
-                    console.log(course.general["מספר מקצוע"]);
+                    //console.log(course.general["מספר מקצוע"]);
                 }
             } 
         }
@@ -717,7 +717,7 @@ async function setupData()
 
     if (firstRadio.checked)
     {
-        console.log("here!")
+        //console.log("here!")
         coursesFromRishumLatest = currentSemester; 
         //setCookie("pref","current",365*5);
         //need to check what's current semester when automating
@@ -729,8 +729,12 @@ async function setupData()
     }
 
     updateAutoComplete();
-    updateTree();
+    if (!firstSetup)
+        updateTree();
+    else
+        firstSetup = false;
 }
+var firstSetup = true;
 setupData();
 // event listeners setup
 
