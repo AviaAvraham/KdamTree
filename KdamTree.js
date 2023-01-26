@@ -116,7 +116,7 @@ async function getSummerData(courseNum)
     //document.getElementById("summerStatistics").innerText = text;
 }
 
-
+var recursionDepthPreCourses = 0;
 function getPreCourses(course)
 {
     var kdamim = course.general["מקצועות קדם"];
@@ -129,9 +129,12 @@ function getPreCourses(course)
         for (var preCourseNum of arr)
         {
             var preCourse = getCourse(preCourseNum);
-            if (preCourse)
+            //console.log(preCourseNum);
+            if (preCourse && recursionDepthPreCourses <= 10)
             {
+                recursionDepthPreCourses+=1;
                 var kdamkdam = getPreCourses(preCourse);
+                recursionDepthPreCourses -=1;
                 if (kdamkdam == "") 
                 {
                     text += "<li><span class=\"box\">";
@@ -260,13 +263,19 @@ function getNextCoursesArr(courseName)
     return arr;
 }
 
+var recursionDepthNextCourses = 0;
 function getNextCourses(courseName)
 {
     var text = "";
     var nextCOursesArr = getNextCoursesArr(courseName);
     for (var nextCourse of nextCOursesArr)
     {
-        var kdamkdam = getNextCourses(nextCourse.general["מספר מקצוע"]);
+        if (recursionDepthNextCourses <= 10)
+        {
+            recursionDepthNextCourses+=1; //think of keeping list of nexts or smth
+            var kdamkdam = getNextCourses(nextCourse.general["מספר מקצוע"]);
+            recursionDepthNextCourses-=1;
+        }
         if (kdamkdam == "") 
         {
             text += "<li><span class=\"box\">";
