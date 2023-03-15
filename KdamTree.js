@@ -76,7 +76,7 @@ async function getSummerData(courseNum)
         var text = 'מספר מקצוע":"' + courseNum;
         if (b.indexOf(text) > -1)
         {
-            years += i.toString() + " ";
+            years += (i+1).toString() + " ";
             count++;
             //document.getElementById("summerStatistics").innerText = true;
         }
