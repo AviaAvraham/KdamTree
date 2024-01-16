@@ -683,9 +683,32 @@ async function setupData()
 {
     if (currentSemester == undefined || previousSemester == undefined || winterAndSpring == undefined)
     {
-        //this needs to be automated
-        var a = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
-        var b = await fetch("https://cheesefork.cf/courses/courses_202301.min.js"); //should be current semester
+        //var a = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
+        //var b = await fetch("https://cheesefork.cf/courses/courses_202301.min.js");
+        //now automated!
+        var a = "";
+        var b = "";
+        for (var i = new Date().getFullYear(); i >= 2017 ; i--)
+        {
+            var temp;
+            if (a === "")
+            {
+                temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"01.min.js");
+                if (temp.status === 200)
+                    a = temp;
+            }
+
+            if (b === "")
+            {
+                temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"02.min.js");
+                if (temp.status === 200)
+                    b = temp;
+            }
+
+            if (a !== "" && b !== "")
+                break;
+        }
+        //
         
         if (a.status === 200 && b.status === 200)
         {
