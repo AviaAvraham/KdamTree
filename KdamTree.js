@@ -710,7 +710,7 @@ async function setupData()
         }
         //
         
-        if (a.status === 200 && b.status === 200)
+        if (a !== "" && a.status === 200 && b !== "" && b.status === 200)
         {
             let firstRishum = await a.text();
             firstRishum = firstRishum.replace("courses_from_rishum","list1");
@@ -740,24 +740,23 @@ async function setupData()
                     winterAndSpring.push(course);
                     //console.log(course.general["מספר מקצוע"]);
                 }
-            } 
+            }
+            
+            var firstRadio = document.querySelector("#showSemester");
+            var secondRadio = document.querySelector("#showAllYear");
+            if (firstRadio.checked)
+            {
+                //console.log("here!")
+                coursesFromRishumLatest = currentSemester; 
+                //setCookie("pref","current",365*5);
+                //need to check what's current semester when automating
+            }
+            else 
+            {
+                //setCookie("pref","allYear",365*5);
+                coursesFromRishumLatest = winterAndSpring;
+            }
         }
-    }
-    
-    var firstRadio = document.querySelector("#showSemester");
-    var secondRadio = document.querySelector("#showAllYear");
-
-    if (firstRadio.checked)
-    {
-        //console.log("here!")
-        coursesFromRishumLatest = currentSemester; 
-        //setCookie("pref","current",365*5);
-        //need to check what's current semester when automating
-    }
-    else 
-    {
-        //setCookie("pref","allYear",365*5);
-        coursesFromRishumLatest = winterAndSpring;
     }
 
     updateAutoComplete();
