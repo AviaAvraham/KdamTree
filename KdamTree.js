@@ -694,15 +694,19 @@ async function setupData()
             if (a === "")
             {
                 temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"01.min.js");
-                if (temp.status === 200)
+                if (temp.status === 200){
                     a = temp;
+                    console.log("now using " + i + "01")
+                }
             }
 
             if (b === "")
             {
                 temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"02.min.js");
-                if (temp.status === 200)
+                if (temp.status === 200){
                     b = temp;
+                    console.log("now using " + i + "02")
+                }
             }
 
             if (a !== "" && b !== "")
@@ -746,13 +750,14 @@ async function setupData()
             var secondRadio = document.querySelector("#showAllYear");
             if (firstRadio.checked)
             {
-                //console.log("here!")
+                console.log("here!")
                 coursesFromRishumLatest = currentSemester; 
                 //setCookie("pref","current",365*5);
                 //need to check what's current semester when automating
             }
             else 
             {
+                console.log("showing all")
                 //setCookie("pref","allYear",365*5);
                 coursesFromRishumLatest = winterAndSpring;
             }
