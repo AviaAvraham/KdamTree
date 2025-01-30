@@ -69,12 +69,24 @@ async function getSummerData(courseNum)
     //document.getElementById("summerStatistics").innerText = "";
     var sum = 0, count = 0;
     var years = "";
-    for (var i = new Date().getFullYear(); i >= 2017 ; i--)
+    for (var i = new Date().getFullYear(); i > 2017 ; i--)
     {
-        var a = await fetch("https://cheesefork.cf/courses/courses_"+i+"03.min.js");
-        var b = await a.text();
+        var summer_url;
+        if (i > 2023)
+        {
+            // because of SAP system, links have a new format
+            // just an estimation for now based on winter and spring... hasn't happened yet
+            summer_url = `https://sap.cheesefork.cf/courses_${i}_202.min.js`; 
+        }
+        else
+        {
+            // old, ug system link
+            summer_url = `https://ug.cheesefork.cf/courses_${i-1}03.min.js` // i-1 due to offset in urls, summer of 2023 is 202203
+        }
+        var summer_response = await fetch(summer_url);
+        var summer_data = await summer_response.text();
         var text = 'מספר מקצוע":"' + courseNum;
-        if (b.indexOf(text) > -1)
+        if (summer_data.indexOf(text) > -1)
         {
             years += (i+1).toString() + " ";
             count++;
@@ -683,45 +695,55 @@ async function setupData()
 {
     if (currentSemester == undefined || previousSemester == undefined || winterAndSpring == undefined)
     {
-        //var a = await fetch("https://cheesefork.cf/courses/courses_202202.min.js");
-        //var b = await fetch("https://cheesefork.cf/courses/courses_202301.min.js");
-        //now automated!
-        var a = "";
-        var b = "";
+        // fetch latest course data
+        var winter_response, spring_response;
         for (var i = new Date().getFullYear(); i >= 2017 ; i--)
         {
+            var winter_url, spring_url;
+            if (i > 2023)
+            {
+                // because of SAP system, links have a new format
+                winter_url = `https://sap.cheesefork.cf/courses_${i}_200.min.js`
+                spring_url = `https://sap.cheesefork.cf/courses_${i}_201.min.js`
+            }
+            else
+            {
+                // old, ug system links
+                winter_url = `https://ug.cheesefork.cf/courses_${i}01.min.js`
+                spring_url = `https://ug.cheesefork.cf/courses_${i}02.min.js`
+            }
+
             var temp;
-            if (a === "")
+            if (!winter_response)
             {
-                temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"01.min.js");
+                temp = await fetch(winter_url);
                 if (temp.status === 200){
-                    a = temp;
-                    console.log("now using " + i + "01")
+                    winter_response = temp;
+                    console.log("now using " + i + " for winter")
                 }
             }
 
-            if (b === "")
+            if (!spring_response)
             {
-                temp = await fetch("https://cheesefork.cf/courses/courses_"+i+"02.min.js");
+                temp = await fetch(spring_url);
                 if (temp.status === 200){
-                    b = temp;
-                    console.log("now using " + i + "02")
+                    spring_response = temp;
+                    console.log("now using " + i + " for spring")
                 }
             }
 
-            if (a !== "" && b !== "")
+            if (winter_response && spring_response)
                 break;
         }
-        //
         
-        if (a !== "" && a.status === 200 && b !== "" && b.status === 200)
+        if (winter_response && winter_response.status === 200 && spring_response && spring_response.status === 200)
         {
-            let firstRishum = await a.text();
+            let firstRishum = await winter_response.text();
             firstRishum = firstRishum.replace("courses_from_rishum","list1");
             eval(firstRishum);
             previousSemester = list1;
             //console.log(previousSemester.length)
-            let secondRishum = await b.text();
+            let secondRishum = await spring_response.text();
             secondRishum = secondRishum.replace("courses_from_rishum","list2");
             eval(secondRishum);
             currentSemester = list2;
