@@ -72,6 +72,7 @@ async function getSummerData(courseNum)
     for (var i = new Date().getFullYear(); i > 2017 ; i--)
     {
         var summer_url;
+        var real_course_num = courseNum;
         if (i > 2023)
         {
             // because of SAP system, links have a new format
@@ -82,10 +83,11 @@ async function getSummerData(courseNum)
         {
             // old, ug system link
             summer_url = `https://ug.cheesefork.cf/courses_${i-1}03.min.js` // i-1 due to offset in urls, summer of 2023 is 202203
+            real_course_num = courseNum.split('').filter((_, index) => index !== 0 && index !== 4).join(''); // Remove indices 0 and 4
         }
         var summer_response = await fetch(summer_url);
         var summer_data = await summer_response.text();
-        var text = 'מספר מקצוע":"' + courseNum;
+        var text = 'מספר מקצוע":"' + real_course_num;
         if (summer_data.indexOf(text) > -1)
         {
             years += (i+1).toString() + " ";
@@ -105,7 +107,9 @@ async function getSummerData(courseNum)
         text = "הקורס לא הועבר בקיץ ב-" + currYear + " השנים האחרונות";
     //document.getElementById("summerStatistics").innerText = text;
     text += "<br>";
-    var link = "https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json";
+    var shortedCourseNum = courseNum.split('').filter((_, index) => index !== 0 && index !== 4).join(''); // Remove indices 0 and 4
+    console.log(shortedCourseNum)
+    var link = "https://michael-maltsev.github.io/technion-histograms/" + shortedCourseNum + "/index.min.json";
     let myObject = await fetch(link);
     if ((myObject.status === 200))
     {
@@ -190,8 +194,10 @@ async function putColorByValue(elems)
     for (var elem of elems)
     {
         var courseNum = elem.getAttribute("value"); //is a string
+        var shortenedCourseNum = courseNum.split('').filter((_, index) => index !== 0 && index !== 4).join(''); // Remove indices 0 and 4
+        //console.log(courseNum + "-> " +shortenedCourseNum)
         if (isVisible(elem))
-            promises.push(getAverage("https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json",elem));
+            promises.push(getAverage("https://michael-maltsev.github.io/technion-histograms/" + shortenedCourseNum + "/index.min.json",elem));
             //promises.push(getAverage("https://aviaavraham.github.io/KdamTree/course_avg/"+courseNum + ".txt",elem));
     }
     return Promise.all(promises);
@@ -616,12 +622,13 @@ function showAllSelected()
     //var malagim = "214120 324262 324266 324267 324269 324273 324274 324279 324282 324283 324284 324292 324293 324295 324297 324305 324306 324307 324310 324430 324432 324442 324444 324445 324453 324456 324457 324462 324520 324521 324527 324528 324539 324540 324946 324962 324992 325001 326004";
     var arr = [];
     if (document.querySelector("#malagim").checked && document.querySelector("#english").checked)
-        arr = getMutual(englishCourses.split(" "),malagim.split(" "))
+        arr = getMutual(englishCourses,malagim)
     else if (document.querySelector("#malagim").checked)
-        arr = arr.concat(malagim.split(" "));
+        arr = arr.concat(malagim);
     else if (document.querySelector("#english").checked)
-        arr = arr.concat(englishCourses.split(" "));
+        arr = arr.concat(englishCourses);
     
+    console.log(arr);
     var list = document.getElementsByName("customListCheckbox");
     for (var checkbox of list)
     {
@@ -640,7 +647,7 @@ function showAllSelected()
         }
     }
     arr = [...new Set(arr)];
-    //console.log(arr);
+    console.log(arr);
     if (count)
     {
         document.querySelector("#course").disabled = true;
@@ -885,19 +892,58 @@ function()
 document.getElementById("showAllYear").addEventListener("change", setupData);
 document.getElementById("showSemester").addEventListener("change", setupData);
 
+// default values, old
+var englishCourses = "014143 014733 016339 016210 046211 046746 036005 036012 036049 036099 036088 036064 036032 036087 036026 056146 056386 056396 056394 084213 086730 086366 086520 086761 086923 094189 094195 104222 114229 114252 114250 114251 136042 127437 127741 127010 206808 205923 236201 236609 236833 236816 236901 236719 236205 274252 336546 338002 315014 315200 315242".split(" ").join(" ");
+var malagim = "207953 214120 324262 324267 324269 324274 324279 324282 324283 324284 324292 324293 324307 324314 324432 324439 324442 324445 324518 324521 324527 324528 324992 324946 326001 326004 326005 326008".split(" "); //winter 2023
 
-var englishCourses = "014143 014733 016339 016210 046211 046746 036005 036012 036049 036099 036088 036064 036032 036087 036026 056146 056386 056396 056394 084213 086730 086366 086520 086761 086923 094189 094195 104222 114229 114252 114250 114251 136042 127437 127741 127010 206808 205923 236201 236609 236833 236816 236901 236719 236205 274252 336546 338002 315014 315200 315242";
-//var englishCourses = "014603 046200 036013 038746 036026 036073 036004 056391 056403 056149 066614 084515 085407 085915 085802 085805 086484 086762 86802 088792 094195 094396 096617 104182 104122 106433 106723 196014 197010 114229 114252 114250 114251 136022 136014 136037 205028 236716 236299 236330 236509 236781 236025 236606 336016 324282 326000 326002 326005 326006"; //spring 2022
-//var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004"; //winter 2022
-//var malagim = "214120 324262 324266 324267 324269 324273 324274 324279 324282 324283 324284 324292 324293 324295 324297 324305 324306 324307 324310 324430 324432 324442 324444 324445 324453 324456 324457 324462 324520 324521 324527 324528 324539 324540 324946 324962 324992 325001 326004"; //winter 2022
-//var malagim = "214119 214120 324265 324267 324269 324273 324274 324258 324282 324284 324286 324292 324294 324297 324307 324314 324424 324433 324439 324441 324442 324445 324446 324527 324528 324541 324975 324992 325006 326000 326001 326002 326005 326006"; //spring 2022
-var malagim = "207953 214120 324262 324267 324269 324274 324279 324282 324283 324284 324292 324293 324307 324314 324432 324439 324442 324445 324518 324521 324527 324528 324992 324946 326001 326004 326005 326008"; //winter 2023
+// created a small backend that returns updated english and malag courses
+const fetch_english_and_malag_url = 'https://fetch-malags-and-english-courses.onrender.com/';
+
+async function fetch_english_and_malag() {
+    try {
+        const response = await fetch(fetch_english_and_malag_url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const convert_format = (str) => {
+            if (str.length === 6) {
+              return `00${str.slice(0, 3)}${str.slice(3)}`;
+            } else if (str.length === 7) {
+              return `0${str}`;
+            }
+            return str;
+        }
+        if (data.courses != "")
+            englishCourses = data.courses.map(convert_format)
+        else
+            englishCourses = englishCourses.map(convert_format);
+
+        if (data.malagim != "")
+            malagim = data.malagim.map(convert_format);
+        else
+            malagim = malagim.map(convert_format);
+
+        // Log the variables to the console
+        console.log(data)
+        console.log('Courses:', data.courses);
+        console.log('Malagim:', data.malagim);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+fetch_english_and_malag();
+
+
 
 document.getElementById("malagim").addEventListener("change", showAllSelected);
 document.getElementById("english").addEventListener("change", showAllSelected);
 
 //load defaults
-document.getElementById("course").value = "234114 - מבוא למדעי המחשב מ'";
+document.getElementById("course").value = "02340114 - מבוא למדעי המחשב מ'";
 updateTree();
 
 
