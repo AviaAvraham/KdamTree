@@ -892,9 +892,19 @@ function()
 document.getElementById("showAllYear").addEventListener("change", setupData);
 document.getElementById("showSemester").addEventListener("change", setupData);
 
+
+const convert_format = (str) => {
+    if (str.length === 6) {
+      return `00${str.slice(0, 3)}${str.slice(3)}`;
+    } else if (str.length === 7) {
+      return `0${str}`;
+    }
+    return str;
+}
+
 // default values, old
-var englishCourses = "014143 014733 016339 016210 046211 046746 036005 036012 036049 036099 036088 036064 036032 036087 036026 056146 056386 056396 056394 084213 086730 086366 086520 086761 086923 094189 094195 104222 114229 114252 114250 114251 136042 127437 127741 127010 206808 205923 236201 236609 236833 236816 236901 236719 236205 274252 336546 338002 315014 315200 315242".split(" ").join(" ");
-var malagim = "207953 214120 324262 324267 324269 324274 324279 324282 324283 324284 324292 324293 324307 324314 324432 324439 324442 324445 324518 324521 324527 324528 324992 324946 326001 326004 326005 326008".split(" "); //winter 2023
+var englishCourses = "014143 014733 016339 016210 046211 046746 036005 036012 036049 036099 036088 036064 036032 036087 036026 056146 056386 056396 056394 084213 086730 086366 086520 086761 086923 094189 094195 104222 114229 114252 114250 114251 136042 127437 127741 127010 206808 205923 236201 236609 236833 236816 236901 236719 236205 274252 336546 338002 315014 315200 315242".split(" ").join(" ").map(convert_format);
+var malagim = "207953 214120 324262 324267 324269 324274 324279 324282 324283 324284 324292 324293 324307 324314 324432 324439 324442 324445 324518 324521 324527 324528 324992 324946 326001 326004 326005 326008".split(" ").map(convert_format); //winter 2023
 
 // created a small backend that returns updated english and malag courses
 const fetch_english_and_malag_url = 'https://fetch-malags-and-english-courses.onrender.com/';
@@ -908,23 +918,16 @@ async function fetch_english_and_malag() {
         }
 
         const data = await response.json();
-        const convert_format = (str) => {
-            if (str.length === 6) {
-              return `00${str.slice(0, 3)}${str.slice(3)}`;
-            } else if (str.length === 7) {
-              return `0${str}`;
-            }
-            return str;
-        }
+        
         if (data.courses != "")
             englishCourses = data.courses.map(convert_format)
         else
-            englishCourses = englishCourses.map(convert_format);
+            englishCourses = englishCourses;
 
         if (data.malagim != "")
             malagim = data.malagim.map(convert_format);
         else
-            malagim = malagim.map(convert_format);
+            malagim = malagim;
 
         // Log the variables to the console
         console.log(data)
