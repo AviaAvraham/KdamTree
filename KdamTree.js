@@ -197,7 +197,7 @@ async function putColorByValue(elems)
         var shortenedCourseNum = courseNum.split('').filter((_, index) => index !== 0 && index !== 4).join(''); // Remove indices 0 and 4
         //console.log(courseNum + "-> " +shortenedCourseNum)
         if (isVisible(elem))
-            promises.push(getAverage("https://michael-maltsev.github.io/technion-histograms/" + shortenedCourseNum + "/index.min.json",elem));
+            promises.push(getAverage("https://michael-maltsev.github.io/technion-histograms/" + courseNum + "/index.min.json",elem));
             //promises.push(getAverage("https://aviaavraham.github.io/KdamTree/course_avg/"+courseNum + ".txt",elem));
     }
     return Promise.all(promises);
@@ -371,152 +371,7 @@ function toggleList()
     var newElems = this.parentElement.querySelectorAll('[name="avg"]') ; //with parent
     putColorByValue(newElems);
 }
-/*
-async function showMalagimAndEnglish(e)
-{
-    var mode = e.srcElement.id
-    var otherOption = mode == "malagim" ? "english" : "malagim";
-    var text = "";
-    if (e.srcElement.checked)
-    {
-        if (document.getElementById(otherOption).checked)
-            mode = "both";
-        document.getElementById("course").disabled = true;
-        
-        var courseNums = "";
-        var englishCourses = "014603 046200 036013 038746 036026 036073 036004 056391 056403 056149 066614 084515 085407 085915 085802 085805 086484 086762 86802 088792 094195 094396 096617 104182 104122 106433 106723 196014 197010 114229 114252 114250 114251 136022 136014 136037 205028 236716 236299 236330 236509 236781 236025 236606 336016 324282 326000 326002 326005 326006"; //spring 2022
-        //var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004"; //winter 2022
-        //var malagim = "214120 324262 324266 324267 324269 324273 324274 324279 324282 324283 324284 324292 324293 324295 324297 324305 324306 324307 324310 324430 324432 324442 324444 324445 324453 324456 324457 324462 324520 324521 324527 324528 324539 324540 324946 324962 324992 325001 326004"; //winter 2022
-        var malagim = "214119 214120 324265 324267 324269 324273 324274 324258 324282 324284 324286 324292 324294 324297 324307 324314 324424 324433 324439 324441 324442 324445 324446 324527 324528 324541 324975 324992 325006 326000 326001 326002 326005 326006"; //spring 2022
-        if (mode == "malagim")
-            courseNums = malagim
-        else if (mode == "english")
-            courseNums = englishCourses
-        else //both
-        {
-            var temp = ""
-            var englishCoursesArr = englishCourses.split(" ");
-            for (var englishCourse of englishCoursesArr)
-                if (malagim.indexOf(englishCourse) > -1)
-                    temp += englishCourse + " "
-            courseNums = temp.trimEnd();
-        }
 
-        addCustom(courseNums);
-        return;
-
-        var courseNumsArr = courseNums.split(" ");
-        document.getElementById("kdamTo").innerHTML = "";
-
-        for (var courseNum of courseNumsArr)
-        {
-            var course = getCourse(courseNum);
-            if (course)
-            {
-                var elem = document.createElement("li");
-                var span = document.createElement("span");
-                span.classList.add("box");
-                elem.appendChild(span);
-
-                var link = document.createElement("a");
-                link.target = "_blank"
-                link.href =  "https://students.technion.ac.il/local/technionsearch/course/" +  course.general["מספר מקצוע"];
-                link.innerText = course.general["מספר מקצוע"];
-                span.appendChild(link);
-                span.innerHTML += " - ";
-                span.innerHTML += course.general["שם מקצוע"];
-
-                var avgPlaceHolder = document.createElement("span");
-                avgPlaceHolder.setAttribute("value",courseNum);
-                avgPlaceHolder.setAttribute("Name", "avg");
-                span.appendChild(avgPlaceHolder);
-                elems.push(elem);
-                document.getElementById("kdamTo").appendChild(elem);
-
-                var ul = document.createElement("ul")
-                ul.classList.add("nested");
-                ul.style = "margin-top:0px;";
-                var req = getPreCourses(getCourse(courseNum));
-                if (req)
-                    span.classList.add("arrow")
-                ul.innerHTML = req;
-
-                elem.appendChild(ul);
-
-                //elem.innerHTML += "<ul class='nested' style=\"margin-top:0px\">";
-                //elem.innerHTML += getPreCourses(getCourse(courseNum));
-                //elem.innerHTML += "</ul>";
-                
-                //text += "<li><span class=\"box\">";
-                //text += formatNumberAndName(course).replace(course.general["מספר מקצוע"],"<a href='https://students.technion.ac.il/local/technionsearch/course/" +  course.general["מספר מקצוע"] + "' target='_blank'>" + course.general["מספר מקצוע"] + "</a>" );
-                //text += "<span value='" + course.general['מספר מקצוע'] + "' name='avg'></span>";
-                //text += "</span>";
-                //elems.push(course);
-                //text += "</li>";
-                //getAverage("https://aviaavraham.github.io/KdamTree/course_avg/"+courseNum + ".txt",elem);
-            }
-        }
-        updateBoxesEventListners();
-
-        let avgPlaces = Array.from(document.getElementsByName("avg"));
-        avgPlaces = avgPlaces.filter(i => isVisible(i));
-        
-        putColorByValue(avgPlaces).then( function() {   
-            
-                var grades = [];
-                for (var i = 0 ; i < avgPlaces.length; i++)
-                {
-                    if (avgPlaces[i].innerHTML.indexOf("אין ממוצע") < 0)
-                    {
-                        grades.push(parseFloat(avgPlaces[i].innerHTML.replace("- ממוצע - ","")))
-                    }
-                    else
-                        grades.push(0);
-                }
-                grades.sort((a,b)=>b-a);
-                var index = 0;
-                var sortedElems = [];
-                while ( 0 != avgPlaces.length)
-                {
-                    var max = grades[index];
-                    if (max == 0)
-                    {
-                        sortedElems.push(avgPlaces.pop().parentElement.parentElement)
-                        index++;
-                    }
-                    else 
-                    {
-                        for (var i = 0 ; i < avgPlaces.length; i++)
-                        {
-                            if (parseFloat(avgPlaces[i].innerHTML.replace("- ממוצע - ","")) == max)
-                            {
-                                sortedElems.push(avgPlaces[i].parentElement.parentElement);
-                                //document.getElementById("kdamTo").appendChild(avgPlaces[i].parentElement.parentElement);
-                                avgPlaces.splice(i,1);
-                                index++;
-                                break;
-                            }
-                        }
-                    }
-                }
-                for (var elem of sortedElems)
-                    document.getElementById("kdamTo").appendChild(elem);
-            })//.catch(console.log("error"));
-    }
-    else
-    {
-        if (document.getElementById(otherOption).checked)
-        {
-            document.getElementById(otherOption).dispatchEvent(new Event("change"));
-        }
-        else
-        {
-            updateTree();
-            document.getElementById("course").disabled = false;
-        }
-    }
-}
-*/
 async function addCustom(courseNums)
 {
     var elems = [];
@@ -618,8 +473,6 @@ function showAllSelected()
 {
     var count = document.querySelector("#malagim").checked + document.querySelector("#english").checked;
     var names = getCookie("names").split(",");
-    //var englishCourses = "014942 014325 014301 014305 016302 046746 036003 036005 036015 036020 036055 036070 036086 036090 036073 036067 036081 056146 056396 056394 056386 084213 086289 086320 086380 086520 086761 086923 094189 094195 104183 104222 106380 106941 196012 114229 114252 114250 114251 136042 205923 207041 127437 128719 127738 336546 236605 236719 236201 236609 236378 236833 324282 326004";
-    //var malagim = "214120 324262 324266 324267 324269 324273 324274 324279 324282 324283 324284 324292 324293 324295 324297 324305 324306 324307 324310 324430 324432 324442 324444 324445 324453 324456 324457 324462 324520 324521 324527 324528 324539 324540 324946 324962 324992 325001 326004";
     var arr = [];
     if (document.querySelector("#malagim").checked && document.querySelector("#english").checked)
         arr = getMutual(englishCourses,malagim)
@@ -813,81 +666,13 @@ function()
 {
     document.querySelector("#kdamim").classList.remove("nested");
 });
-/*
-document.querySelector("#listName").addEventListener("keyup",function(){
-    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == "" || document.querySelector("#coursesToAdd").value == "";
-});
 
-document.querySelector("#coursesToAdd").addEventListener("keyup",function(){
-    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == "" || document.querySelector("#coursesToAdd").value == "";
-}); */
 
 document.getElementById("showKdamim").addEventListener("mouseout",
 function() 
 {
     document.querySelector("#kdamim").classList.add("nested");
 });
-/*
-document.getElementById("addList").addEventListener("click",
-function()
-{
-    document.querySelector("#addListWindow").classList.toggle("nested");
-    document.querySelector("#saveList").disabled = document.querySelector("#listName").value == ""; 
-});
-document.getElementById("saveList").addEventListener("click",
-function()
-{
-    var arr = document.querySelector("#coursesToAdd").value.split(/\n| |-/);
-    var courseNums = "";
-    for (var t of arr)
-    {
-        var val = parseInt(t).toString();
-        if (val.length == 5)
-        {
-            val = "0" + val;
-        }
-        if (val && val != "NaN")
-        {
-            //console.log(val)
-            var course = getCourse(val);
-            if (course)
-            {
-                if (courseNums.indexOf(val) == -1)
-                    courseNums += val + " ";
-                console.log(formatNumberAndName(course));
-            }
-        }
-    }
-    var namesList = getCookie("names");
-    var newListName = document.querySelector("#listName").value.replaceAll(",","");
-    var cookieVal = namesList ? namesList + ","  + newListName : newListName;
-    if (namesList.split(",").indexOf(newListName) > -1)
-    {
-        if(!confirm("קיימת כבר רשימה בשם זה, האם ברצונך לעדכן אותה?"))
-            return;
-        cookieVal = namesList; //not empty and in there, so don't change
-    }
-    else 
-        addCheckBox(newListName,courseNums);
-    
-    document.querySelector("#addListWindow").classList.toggle("nested");
-    setCookie("names",cookieVal ,365*5);
-    setCookie(newListName,courseNums,365*5);
-});
-*/
-/*
-document.getElementById("beta").addEventListener("change", 
-function()
-{
-    var modeOn = this.checked;
-    //update cookies and read them onload
-    var elems = document.getElementsByClassName("betaFeature");
-    for (var elem of elems)
-    {
-        elem.classList.toggle("nested");
-    }
-});
-*/
 
 document.getElementById("showAllYear").addEventListener("change", setupData);
 document.getElementById("showSemester").addEventListener("change", setupData);
